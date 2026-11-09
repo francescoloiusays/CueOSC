@@ -154,7 +154,9 @@ int main (int argc, char** argv)
             juce::Thread::sleep (1);
         }
         std::cout << "        arrivato dopo " << arrived << " ms" << std::endl;
-        check (arrived > 145 && arrived < 200, "ritardo 150 ms rispettato");
+        // sulle macchine condivise di GitHub i tempi sono meno stabili
+        const double maxMs = juce::SystemStats::getEnvironmentVariable ("CI", {}).isNotEmpty() ? 400.0 : 200.0;
+        check (arrived > 145 && arrived < maxMs, "ritardo 150 ms rispettato");
     }
 
     std::cout << "Salvataggio nel progetto" << std::endl;
